@@ -1,513 +1,715 @@
 <!DOCTYPE html>
-<html lang="de" class="">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>African Sun - Dein Sonnenstudio</title>
-    
-    <!-- Tailwind CSS laden -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Konfiguration für Custom Styles und Dark Mode -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class', // Dark Mode über 'class' Attribut steuern
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-                    },
-                    animation: {
-                        'spin-slow': 'spin 3s linear infinite',
-                        'gradient-bg': 'gradient-flow 8s ease infinite',
-                    },
-                    keyframes: {
-                        'gradient-flow': {
-                            '0%, 100%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Diyarbakır Ocakbaşı – Holzkohle-Grill Wiesbaden</title>
+<meta name="description" content="Authentischer Ocakbaşı-Holzkohlegrill in Wiesbaden. Adana, Urfa, Şiş – frisch, ehrlich, 100 % Halal. Jetzt anrufen oder vorbeikommen." />
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
 
-    <style>
-        /* Custom Scrollbar verstecken für cleanen Look */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+<style>
+/* =========================================================================
+   TOKENS  – Schwarz & Gold, klassisch-elegant
+   ========================================================================= */
+:root{
+  --ink:        #e7cf9c;          /* Standardtext (warmes Gold) */
+  --gold:       #c8a24c;
+  --gold-bright:#e8cd8c;          /* Überschriften / Preise */
+  --gold-soft:  #c5a468;
+  --gold-mute:  #ad9560;          /* Beschreibungen (etwas heller für Lesbarkeit) */
+  --chili:      #d6422a;
+  --ok:         #6fcf97;
+
+  --line:       rgba(200,162,76,.26);
+  --line-soft:  rgba(200,162,76,.14);
+  --glass:      rgba(22,16,9,.5);
+  --glass-2:    rgba(40,30,16,.45);
+
+  --serif:      "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --roman:      "Cinzel", "Times New Roman", serif;
+
+  --radius:     18px;
+  --radius-sm:  12px;
+  --maxw:       700px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+
+body{
+  background:#000;
+  color:var(--ink);
+  font-family:var(--serif);
+  line-height:1.5;
+  min-height:100dvh;
+  width:100%; max-width:100%;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* =========================================================================
+   HINTERGRUND  – schwarzer Stein + Korn, faded ein
+   ========================================================================= */
+.bg{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  opacity:0; transition:opacity 1.6s ease;
+  background:radial-gradient(130% 90% at 50% -8%, #1b1610 0%, #0c0b09 52%, #060504 100%);
+}
+body.ready .bg{ opacity:1; }
+.bg::before{ content:""; position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 42%, transparent 55%, rgba(0,0,0,.6) 100%); }
+.bg::after{
+  content:""; position:absolute; inset:0; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.wrap{
+  position:relative; z-index:1;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:clamp(16px,4vw,30px) clamp(14px,4vw,20px) 84px;
+  display:flex; flex-direction:column;
+  gap:clamp(20px,4.4vw,30px);
+  opacity:0; transform:translateY(16px);
+  transition:opacity 1s ease .4s, transform 1s ease .4s;
+}
+body.ready .wrap{ opacity:1; transform:none; }
+
+/* =========================================================================
+   GLAS-KACHEL  – dunkel mit sanftem Gold-Leuchten
+   ========================================================================= */
+.tile{
+  position:relative;
+  background:var(--glass);
+  backdrop-filter:blur(15px) saturate(1.1);
+  -webkit-backdrop-filter:blur(15px) saturate(1.1);
+  border:1px solid var(--gold);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px rgba(200,162,76,.12),
+    0 14px 36px -16px rgba(0,0,0,.75),
+    0 0 42px -16px rgba(200,162,76,.42),      /* leichtes Leuchten */
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+.tile::after{ content:""; position:absolute; inset:4px; border:1px solid var(--line-soft); border-radius:calc(var(--radius) - 4px); pointer-events:none; z-index:0; }
+.tile > *{ position:relative; z-index:1; }
+.info{ box-shadow:
+    0 0 0 1px rgba(200,162,76,.10),
+    0 10px 24px -14px rgba(0,0,0,.7),
+    0 0 30px -16px rgba(200,162,76,.34),
+    inset 0 1px 0 rgba(255,255,255,.05); }
+
+/* =========================================================================
+   ZIER-ORNAMENT
+   ========================================================================= */
+.flourish{ display:block; color:var(--gold); width:min(240px,62%); height:auto; margin:9px auto 0; }
+.cat-head{ text-align:center; }
+.cat-head h2,
+.head h2{
+  font-family:var(--roman); font-weight:600;
+  font-size:clamp(1.6rem,5.5vw,2.3rem); letter-spacing:.10em;
+  color:var(--gold-bright); text-transform:uppercase;
+}
+.cat-head .kicker{ font-family:var(--serif); font-style:italic; font-size:1.02rem; color:var(--gold-soft); margin-top:6px; }
+.head{ text-align:center; }
+.head .eyebrow{ font-family:var(--roman); font-size:.62rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); font-weight:500; }
+
+/* =========================================================================
+   HERO  – Bild oben, schwarzer Verlauf, Pille, Titel  (wie Mangal)
+   ========================================================================= */
+.hero{ padding:0; }
+.hero__media{
+  position:relative;
+  min-height:clamp(300px, 60vw, 390px);
+  display:flex; flex-direction:column; justify-content:flex-end; align-items:center;
+  text-align:center; padding:clamp(22px,5vw,32px);
+  background:#100b07; background-size:cover; background-position:center;
+}
+.hero__media::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 12%, rgba(6,4,2,.74) 52%, #0b0907 100%);
+}
+.status{
+  position:absolute; top:14px; right:14px; z-index:2;
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--roman); font-size:.6rem; font-weight:500;
+  letter-spacing:.2em; text-transform:uppercase;
+  padding:6px 12px; border-radius:999px;
+  background:rgba(8,6,4,.6); border:1px solid var(--line); color:var(--gold-soft);
+  backdrop-filter:blur(6px);
+}
+.status .dot{ width:7px; height:7px; border-radius:50%; background:var(--gold-mute); }
+.status.open .dot{ background:var(--ok); box-shadow:0 0 9px 1px var(--ok); animation:pulse 2.2s ease-in-out infinite; }
+.status.open{ color:var(--gold-bright); }
+@keyframes pulse{ 50%{ box-shadow:0 0 0 6px rgba(111,207,151,.16); } }
+
+.hero__head{ position:relative; z-index:2; }
+.pill{
+  display:inline-block;
+  font-family:var(--roman); font-size:.64rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase;
+  padding:7px 15px; border-radius:999px;
+  background:linear-gradient(180deg, var(--gold-bright), var(--gold-soft)); color:#1c1407;
+  box-shadow:0 6px 18px -6px rgba(200,162,76,.7);
+  margin-bottom:14px;
+}
+.hero__name{
+  font-family:var(--roman); font-weight:700;
+  font-size:clamp(2.2rem, 9vw, 3.8rem); line-height:1; letter-spacing:.05em;
+  color:var(--gold-bright); text-transform:uppercase;
+  text-shadow:0 4px 30px rgba(0,0,0,.75);
+}
+.hero__spec{ margin-top:12px; font-family:var(--roman); font-size:clamp(.66rem,2.4vw,.82rem); font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); }
+.hero__sub{ margin-top:8px; font-family:var(--serif); font-style:italic; font-size:clamp(1rem,3vw,1.2rem); color:var(--gold-soft); }
+
+.hero__chips{ display:flex; flex-wrap:wrap; gap:9px; justify-content:center; padding:clamp(16px,4vw,22px); }
+.chip{
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--serif); font-size:.95rem; font-weight:600;
+  padding:7px 14px; border-radius:999px;
+  background:var(--glass-2); border:1px solid var(--line); color:var(--ink);
+}
+.chip svg{ width:15px; height:15px; color:var(--gold); }
+
+/* =========================================================================
+   3 INFO-KACHELN
+   ========================================================================= */
+.info-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(10px,2.6vw,16px); }
+.info{ padding:15px 8px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:5px; }
+.info .top-ico{ width:22px; height:22px; color:var(--gold); filter:drop-shadow(0 3px 9px rgba(200,162,76,.5)); }
+.info .label{ font-family:var(--roman); font-size:.54rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-mute); font-weight:500; }
+.info .val{ font-family:var(--serif); font-size:clamp(.9rem,2.4vw,1.12rem); font-weight:600; color:var(--gold-bright); }
+
+/* =========================================================================
+   CTAs
+   ========================================================================= */
+.cta-row{ display:flex; flex-direction:column; gap:12px; }
+.btn{
+  position:relative;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; padding:17px 22px;
+  font-family:var(--roman); font-weight:700; font-size:.95rem; letter-spacing:.09em; text-transform:uppercase;
+  text-decoration:none; cursor:pointer; border:1px solid var(--gold);
+  transition:transform .15s ease, background .25s ease, box-shadow .25s ease;
+}
+.btn::after{ content:""; position:absolute; inset:3px; border:1px solid rgba(255,255,255,.12); pointer-events:none; }
+.btn svg{ width:17px; height:17px; flex:0 0 auto; }
+.btn:active{ transform:translateY(1px); }
+.btn-primary{ background:linear-gradient(180deg, var(--gold-bright), var(--gold-soft)); color:#1c1407; box-shadow:0 12px 30px -14px rgba(200,162,76,.8); }
+.btn-primary:hover{ box-shadow:0 16px 40px -14px rgba(232,205,140,.9); }
+.btn-ghost{ background:var(--glass-2); color:var(--gold-bright); box-shadow:0 10px 28px -16px rgba(200,162,76,.6); }
+.btn-ghost:hover{ background:rgba(200,162,76,.12); }
+
+/* =========================================================================
+   LAUFBAND
+   ========================================================================= */
+.marquee{
+  position:relative; overflow:hidden;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  background:var(--glass); border-radius:10px; padding:12px 0;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.marquee__track{ display:flex; gap:0; will-change:transform; }
+.marquee__track span{
+  font-family:var(--serif); font-style:italic; font-size:1.28rem; letter-spacing:.03em;
+  white-space:nowrap; padding:0 26px; color:var(--gold-soft);
+  display:inline-flex; align-items:center; gap:26px; flex:0 0 auto;
+}
+.marquee__track span::after{ content:"\2666"; font-size:.7rem; color:var(--gold); }
+
+/* =========================================================================
+   TRUST / KENNZAHLEN
+   ========================================================================= */
+.trust{ display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:0; padding:0; }
+.trust-cell{ text-align:center; padding:22px 12px; position:relative; }
+.trust-cell + .trust-cell::before{ content:""; position:absolute; left:0; top:50%; transform:translateY(-50%); width:1px; height:60%; background:var(--line-soft); }
+.trust-cell .num, .trust-cell .big{ font-family:var(--roman); font-weight:700; font-size:clamp(1.15rem,5.5vw,2rem); line-height:1; color:var(--gold-bright); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.trust-cell .text{ font-family:var(--roman); font-size:.58rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-mute); margin-top:10px; display:block; }
+
+/* =========================================================================
+   SPEISEKARTE  – nummeriert, Punktführung, Chili
+   ========================================================================= */
+.cat{ padding:clamp(20px,4.4vw,28px); }
+.m-list{ margin-top:22px; }
+.m-item{ padding:15px 0; border-bottom:1px solid var(--line-soft); }
+.m-item:first-child{ border-top:1px solid var(--line-soft); }
+.m-row{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  grid-template-areas:"name dots price" "note note note";
+  column-gap:8px; row-gap:2px;
+}
+.m-num{ font-family:var(--roman); font-weight:500; font-size:1.1rem; color:var(--gold); min-width:1.7em; }
+.m-name{ grid-area:name; align-self:baseline; font-family:var(--serif); font-weight:600; font-size:1.38rem; color:var(--gold-bright); min-width:0; }
+.m-note{ grid-area:note; font-family:var(--serif); font-style:italic; font-size:1rem; color:var(--gold-soft); }
+.m-note:empty{ display:none; }
+.m-leader{ grid-area:dots; align-self:end; margin-bottom:5px; border-bottom:2px dotted rgba(200,162,76,.45); min-width:14px; }
+.m-price{ grid-area:price; align-self:baseline; font-family:var(--serif); font-weight:600; font-size:1.3rem; color:var(--gold-bright); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.m-desc{ font-family:var(--serif); font-size:1.08rem; font-weight:500; line-height:1.32; color:var(--gold-mute); margin-top:3px; max-width:80%; }
+.chili{ width:17px; height:17px; margin-left:7px; vertical-align:-2px; }
+.tag-veg{ font-family:var(--roman); font-size:.5rem; font-weight:500; letter-spacing:.1em; color:#8fbf6a; border:1px solid #8fbf6a55; padding:2px 5px; margin-left:8px; vertical-align:middle; }
+
+/* =========================================================================
+   GALERIE  – gold gerahmte Fotos
+   ========================================================================= */
+.gallery{ padding:clamp(20px,4.4vw,28px); }
+.grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:22px; }
+.gtile{ position:relative; border:1px solid var(--gold); padding:5px; }
+.gtile::after{ content:""; position:absolute; inset:2px; border:1px solid var(--line-soft); pointer-events:none; }
+.gtile.wide{ grid-column:span 2; }
+.gtile img{ width:100%; aspect-ratio:1/1; object-fit:cover; display:block; }
+.gtile.wide img{ aspect-ratio:2/1; }
+
+/* =========================================================================
+   ANFAHRT
+   ========================================================================= */
+.anfahrt{ padding:clamp(20px,4.4vw,28px); }
+.contact{ display:flex; flex-direction:column; gap:16px; margin-top:22px; align-items:center; text-align:center; }
+.contact .line .label{ font-family:var(--roman); font-size:.56rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-mute); display:block; margin-bottom:4px; }
+.contact .line .v{ font-family:var(--serif); font-size:1.2rem; color:var(--gold-bright); }
+.contact .cta-row{ width:100%; margin-top:6px; }
+
+.foot{ text-align:center; color:var(--gold-mute); font-family:var(--serif); font-style:italic; font-size:.95rem; padding-top:6px; }
+.foot a{ color:var(--gold-soft); }
+
+:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; }
+
+/* =========================================================================
+   STICKY HALAL-ICON (unten links)
+   ========================================================================= */
+.halal-badge{
+  position:fixed; left:16px; bottom:16px; z-index:50;
+  width:clamp(56px,15vw,72px); height:auto; aspect-ratio:1/1;
+  border-radius:50%; overflow:hidden; background:#fff;
+  transform:translateZ(0);
+  box-shadow:0 0 0 2px var(--gold), 0 8px 24px -6px rgba(0,0,0,.7), 0 0 26px -8px rgba(200,162,76,.7);
+  transition:transform .2s ease;
+}
+.halal-badge img{ width:100%; height:100%; object-fit:cover; display:block; }
+.halal-badge:hover{ transform:translateZ(0) scale(1.05); }
+
+@media (min-width:560px){ .cta-row{ flex-direction:row; } }
+
+/* =========================================================================
+   SCROLL-EINFLUG
+   ========================================================================= */
+.reveal{ opacity:0; transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); will-change:opacity,transform; }
+.reveal--up{ transform:translateY(42px); }
+.reveal--left{ transform:translateX(-50px); }
+.reveal--right{ transform:translateX(50px); }
+.reveal--scale{ transform:scale(.94); }
+.reveal.in{ opacity:1; transform:none; }
+.stagger > *{ opacity:0; transform:translateY(36px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+.stagger.in > *{ opacity:1; transform:none; }
+.stagger.in > *:nth-child(1){ transition-delay:.00s; }
+.stagger.in > *:nth-child(2){ transition-delay:.10s; }
+.stagger.in > *:nth-child(3){ transition-delay:.20s; }
+.stagger.in > *:nth-child(4){ transition-delay:.30s; }
+.stagger.in > *:nth-child(5){ transition-delay:.40s; }
+
+@media (prefers-reduced-motion:reduce){
+  *{ animation:none !important; }
+  .bg, .wrap{ transition:none; opacity:1; transform:none; }
+  .reveal, .stagger > *{ opacity:1 !important; transform:none !important; transition:none !important; }
+}
+</style>
 </head>
-<body class="transition-colors duration-700 selection:bg-orange-500 selection:text-white">
+<body data-open="11" data-close="24">
 
-    <!-- Hintergrund Wrapper -->
-    <div id="main-wrapper" class="min-h-screen font-sans transition-all duration-700 bg-gradient-to-br from-yellow-500 via-red-600 to-purple-900 dark:from-indigo-950 dark:via-purple-900 dark:to-blue-950 dark:bg-[length:200%_200%] dark:animate-gradient-bg">
+<div class="bg" aria-hidden="true"></div>
 
-        <!-- Dark Mode Toggle Button -->
-        <button onclick="toggleDarkMode()" id="theme-toggle" class="fixed top-4 right-4 z-50 p-3 rounded-full shadow-xl transition-all duration-300 transform hover:scale-110 active:scale-90 bg-white/90 text-orange-500 shadow-black/20 dark:bg-gray-800 dark:text-yellow-400 dark:border dark:border-yellow-500/50 dark:shadow-[0_0_30px_rgba(250,204,21,0.8)] dark:backdrop-blur-sm">
-            <!-- Icons werden via JS gesteuert -->
-            <i data-lucide="moon" class="block dark:hidden" width="24" height="24"></i>
-            <i data-lucide="sun" class="hidden dark:block animate-spin-slow dark:drop-shadow-[0_0_10px_rgba(250,204,21,1)]" width="24" height="24"></i>
-        </button>
+<main class="wrap" id="top">
 
-        <!-- Hauptcontainer -->
-        <div class="w-full max-w-md mx-auto px-4 py-8 space-y-8">
-
-            <!-- 1. Header Karte -->
-            <div class="rounded-3xl overflow-hidden border relative transform hover:scale-[1.01] transition-all duration-300 bg-white/95 border-white/30 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] dark:bg-gray-900/80 dark:backdrop-blur-md dark:border-orange-500/50 dark:shadow-[0_0_60px_rgba(249,115,22,0.6)]">
-                
-                <div class="h-36 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 relative">
-                    <div class="absolute inset-0 bg-black/10"></div>
-                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/20 to-transparent"></div>
-                    
-                    <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
-                        <div class="w-28 h-28 rounded-full p-1.5 flex items-center justify-center transition-shadow duration-300 bg-white shadow-2xl shadow-black/30 dark:bg-gray-900 dark:shadow-[0_0_40px_rgba(251,146,60,0.8)]">
-                            <div class="w-full h-full rounded-full flex flex-col items-center justify-center border bg-orange-50 border-orange-100 dark:bg-gray-800 dark:border-orange-500/50">
-                                <i data-lucide="sun" class="mb-1 w-12 h-12 fill-orange-400 text-orange-500 drop-shadow-md dark:text-yellow-400 dark:fill-orange-500 dark:drop-shadow-[0_0_15px_rgba(250,204,21,1)]"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-16 pb-8 text-center px-6">
-                    <h1 class="text-4xl font-extrabold tracking-tight mb-2 drop-shadow-sm text-gray-900 dark:text-white dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                        African Sun
-                    </h1>
-                    <p class="font-bold text-sm uppercase tracking-widest text-orange-500 dark:text-orange-400 dark:drop-shadow-[0_0_10px_rgba(249,115,22,1)]">
-                        Dein Sonnenstudio & mehr
-                    </p>
-                </div>
-            </div>
-
-            <!-- 2. Info & Kontakt Karte -->
-            <div class="card-base">
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <a href="tel:+491234567890" class="group flex flex-col items-center justify-center p-5 rounded-2xl shadow-xl active:scale-95 transition-all hover:-translate-y-1 bg-gray-900 text-white shadow-gray-900/40 hover:bg-black dark:bg-gray-800 dark:text-green-400 dark:border dark:border-green-500/30 dark:shadow-[0_0_20px_rgba(74,222,128,0.4)] dark:hover:shadow-[0_0_30px_rgba(74,222,128,0.6)]">
-                            <i data-lucide="phone" class="mb-2 w-7 h-7 drop-shadow-md text-green-400 dark:drop-shadow-[0_0_8px_rgba(74,222,128,1)]"></i>
-                            <span class="text-sm font-bold tracking-wide">Anrufen</span>
-                        </a>
-                        <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center p-5 border-2 rounded-2xl shadow-xl active:scale-95 transition-all hover:-translate-y-1 bg-white border-orange-100 text-gray-800 shadow-orange-900/20 hover:border-orange-300 dark:bg-gray-800 dark:border-red-500/30 dark:text-red-400 dark:shadow-[0_0_20px_rgba(248,113,113,0.4)] dark:hover:shadow-[0_0_30px_rgba(248,113,113,0.6)]">
-                            <i data-lucide="navigation" class="mb-2 w-7 h-7 text-red-500 drop-shadow-md dark:drop-shadow-[0_0_8px_rgba(248,113,113,1)]"></i>
-                            <span class="text-sm font-bold tracking-wide">Route</span>
-                        </a>
-                    </div>
-
-                    <!-- Öffnungszeiten Box -->
-                    <div class="rounded-2xl p-5 shadow-inner border transition-colors bg-gray-50/80 border-gray-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] dark:bg-black/30 dark:border-orange-500/20 dark:shadow-[inset_0_0_20px_rgba(249,115,22,0.05)]">
-                        <div class="flex items-center mb-4 border-b pb-3 border-gray-200 text-gray-900 dark:border-orange-500/20 dark:text-orange-400">
-                            <i data-lucide="clock" class="mr-2 w-5 h-5 text-orange-500 drop-shadow-sm dark:drop-shadow-[0_0_5px_rgba(249,115,22,0.8)]"></i>
-                            <span class="font-extrabold text-sm uppercase tracking-wide">Öffnungszeiten</span>
-                        </div>
-                        <div class="space-y-3 text-sm font-medium text-gray-600 dark:text-gray-300">
-                            
-                            <!-- Mo - Fr -->
-                            <div class="flex justify-between items-center hover:bg-white/5 p-1 rounded transition-colors">
-                                <span>Mo - Fr</span>
-                                <span class="font-bold px-2 py-0.5 rounded shadow-sm bg-white text-gray-900 dark:bg-gray-800 dark:text-orange-200 dark:border dark:border-orange-500/30 dark:shadow-[0_0_5px_rgba(249,115,22,0.2)]">09:00 - 20:00</span>
-                            </div>
-                            
-                            <!-- Samstag -->
-                            <div class="flex justify-between items-center hover:bg-white/5 p-1 rounded transition-colors">
-                                <span>Samstag</span>
-                                <span class="font-bold px-2 py-0.5 rounded shadow-sm bg-white text-gray-900 dark:bg-gray-800 dark:text-orange-200 dark:border dark:border-orange-500/30 dark:shadow-[0_0_5px_rgba(249,115,22,0.2)]">09:00 - 18:00</span>
-                            </div>
-                            
-                            <!-- Sonntag -->
-                            <div class="flex justify-between items-center hover:bg-white/5 p-1 rounded transition-colors">
-                                <span>Sonntag</span>
-                                <span class="font-bold px-2 py-0.5 rounded shadow-sm bg-white text-gray-900 dark:bg-gray-800 dark:text-orange-200 dark:border dark:border-orange-500/30 dark:shadow-[0_0_5px_rgba(249,115,22,0.2)]">10:00 - 16:00</span>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. Geräte Karte -->
-            <div class="card-base">
-                <div class="text-center mb-8 relative">
-                    <div class="flex items-center justify-center gap-2 mb-1">
-                        <i data-lucide="zap" class="w-6 h-6 text-orange-500 drop-shadow-sm dark:text-yellow-400 dark:drop-shadow-[0_0_10px_rgba(250,204,21,1)]"></i>
-                        <h2 class="text-2xl font-black tracking-tight drop-shadow-sm text-gray-800 dark:text-white dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">Unsere Geräte</h2>
-                    </div>
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Ergoline Premium Qualität</p>
-                    <div class="w-16 h-1 mx-auto mt-3 rounded-full bg-gradient-to-r from-orange-300 to-red-400 opacity-60 dark:from-orange-500 dark:to-red-500 dark:shadow-[0_0_15px_rgba(249,115,22,1)] dark:opacity-100"></div>
-                </div>
-
-                <div class="space-y-4">
-                    <!-- Kabine 1 & 7 -->
-                    <div class="cabin-item group">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100">Kabine 1 & 7</h3>
-                                <span class="text-[10px] px-2.5 py-0.5 rounded-full font-extrabold shadow-sm bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300 dark:border dark:border-orange-500/30 dark:shadow-[0_0_10px_rgba(249,115,22,0.3)]">Beliebt</span>
-                            </div>
-                            <div class="text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Ergoline Ultra 500 Turbo</div>
-                            <div class="text-[10px] font-medium text-gray-400 dark:text-gray-500">4x 500W Gesicht • 44x 160W Körper</div>
-                        </div>
-                        <div class="p-2.5 rounded-full shadow-inner transition-colors bg-gray-50 group-hover:bg-orange-50 dark:bg-black/40 dark:group-hover:bg-orange-900/20 dark:group-hover:shadow-[0_0_15px_rgba(249,115,22,0.5)]">
-                            <i data-lucide="sun" class="w-5 h-5 transition-colors text-gray-300 group-hover:text-orange-500 dark:text-gray-600 dark:group-hover:text-yellow-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Kabine 2 -->
-                    <div class="cabin-item group">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100">Kabine 2</h3>
-                            </div>
-                            <div class="text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Ultra 600 Turbo Classic</div>
-                            <div class="text-[10px] font-medium text-gray-400 dark:text-gray-500">4x 500W Gesicht • 50x 160W Körper</div>
-                        </div>
-                        <div class="p-2.5 rounded-full shadow-inner transition-colors bg-gray-50 group-hover:bg-orange-50 dark:bg-black/40 dark:group-hover:bg-orange-900/20 dark:group-hover:shadow-[0_0_15px_rgba(249,115,22,0.5)]">
-                            <i data-lucide="sun" class="w-5 h-5 transition-colors text-gray-300 group-hover:text-orange-500 dark:text-gray-600 dark:group-hover:text-yellow-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Kabine 3 -->
-                    <div class="cabin-item group">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100">Kabine 3</h3>
-                            </div>
-                            <div class="text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">450 Classic Super Power</div>
-                            <div class="text-[10px] font-medium text-gray-400 dark:text-gray-500">4x 400W Gesicht • 42x 100W Körper</div>
-                        </div>
-                        <div class="p-2.5 rounded-full shadow-inner transition-colors bg-gray-50 group-hover:bg-orange-50 dark:bg-black/40 dark:group-hover:bg-orange-900/20 dark:group-hover:shadow-[0_0_15px_rgba(249,115,22,0.5)]">
-                            <i data-lucide="sun" class="w-5 h-5 transition-colors text-gray-300 group-hover:text-orange-500 dark:text-gray-600 dark:group-hover:text-yellow-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Kabine 4 Hybrid -->
-                    <div class="cabin-item group">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100">Kabine 4</h3>
-                                <span class="text-[10px] px-2.5 py-0.5 rounded-full font-extrabold shadow-sm bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 dark:border dark:border-blue-500/30 dark:shadow-[0_0_15px_rgba(59,130,246,0.4)]">Hybrid</span>
-                            </div>
-                            <div class="text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Affinity 500 Twin Power</div>
-                            <div class="text-[10px] font-medium text-gray-400 dark:text-gray-500">3x 520W Gesicht • Hybrid Röhren Mix</div>
-                        </div>
-                        <div class="p-2.5 rounded-full shadow-inner transition-colors bg-gray-50 group-hover:bg-orange-50 dark:bg-black/40 dark:group-hover:bg-orange-900/20 dark:group-hover:shadow-[0_0_15px_rgba(249,115,22,0.5)]">
-                            <i data-lucide="sun" class="w-5 h-5 transition-colors text-gray-300 group-hover:text-orange-500 dark:text-gray-600 dark:group-hover:text-yellow-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Kabine 5 Klima -->
-                    <div class="cabin-item group">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1.5">
-                                <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100">Kabine 5</h3>
-                                <span class="text-[10px] px-2.5 py-0.5 rounded-full font-extrabold shadow-sm bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300 dark:border dark:border-cyan-500/30 dark:shadow-[0_0_15px_rgba(6,182,212,0.4)]">Klima</span>
-                            </div>
-                            <div class="text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">600 Turbo Aircondition</div>
-                            <div class="text-[10px] font-medium text-gray-400 dark:text-gray-500">Klima • 4x 500W Gesicht • 50 Röhren</div>
-                        </div>
-                        <div class="p-2.5 rounded-full shadow-inner transition-colors bg-gray-50 group-hover:bg-orange-50 dark:bg-black/40 dark:group-hover:bg-orange-900/20 dark:group-hover:shadow-[0_0_15px_rgba(249,115,22,0.5)]">
-                            <i data-lucide="sun" class="w-5 h-5 transition-colors text-gray-300 group-hover:text-orange-500 dark:text-gray-600 dark:group-hover:text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. Preise Karte -->
-            <div class="card-base">
-                <div class="text-center mb-8 relative">
-                    <div class="flex items-center justify-center gap-2 mb-1">
-                        <i data-lucide="euro" class="w-6 h-6 text-orange-500 drop-shadow-sm dark:text-yellow-400 dark:drop-shadow-[0_0_10px_rgba(250,204,21,1)]"></i>
-                        <h2 class="text-2xl font-black tracking-tight drop-shadow-sm text-gray-800 dark:text-white dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">Preise & Tarife</h2>
-                    </div>
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Wähle dein Wohlfühl-Paket</p>
-                    <div class="w-16 h-1 mx-auto mt-3 rounded-full bg-gradient-to-r from-orange-300 to-red-400 opacity-60 dark:from-orange-500 dark:to-red-500 dark:shadow-[0_0_15px_rgba(249,115,22,1)] dark:opacity-100"></div>
-                </div>
-
-                <div class="space-y-8">
-                    <!-- Einzelpreise -->
-                    <div class="space-y-6">
-                        <h3 class="text-center text-lg font-serif font-black border-b-2 pb-2 mx-4 drop-shadow-sm text-gray-800 border-orange-100 dark:text-gray-200 dark:border-orange-500/30">
-                            Unsere Preise
-                        </h3>
-
-                        <div class="space-y-4">
-                            <!-- Ergoline 450 -->
-                            <div class="price-block">
-                                <h4 class="text-sm font-bold text-center mb-3 italic text-gray-800 dark:text-gray-200">Ergoline 450 Classic Super Power</h4>
-                                <div class="space-y-1.5">
-                                    <div class="price-row"><span>7 Minuten</span><span class="price-tag">→ 9,00 €</span></div>
-                                    <div class="price-row"><span>14 Minuten</span><span class="price-tag">→ 12,50 €</span></div>
-                                    <div class="price-row"><span>21 Minuten</span><span class="price-tag">→ 15,00 €</span></div>
-                                    <div class="price-row"><span>28 Minuten</span><span class="price-tag">→ 17,00 €</span></div>
-                                </div>
-                            </div>
-
-                            <!-- Ergoline 500 -->
-                            <div class="price-block">
-                                <h4 class="text-sm font-bold text-center mb-3 italic text-gray-800 dark:text-gray-200">Ergoline Ultra 500 Turbo</h4>
-                                <div class="space-y-1.5">
-                                    <div class="price-row"><span>12 Minuten</span><span class="price-tag">→ 12,50 €</span></div>
-                                    <div class="price-row"><span>18 Minuten</span><span class="price-tag">→ 15,00 €</span></div>
-                                    <div class="price-row"><span>24 Minuten</span><span class="price-tag">→ 16,50 €</span></div>
-                                    <div class="price-row"><span>30 Minuten</span><span class="price-tag">→ 17,50 €</span></div>
-                                </div>
-                            </div>
-
-                            <!-- Ergoline Affinity 500 -->
-                            <div class="price-block">
-                                <h4 class="text-sm font-bold text-center mb-3 italic text-gray-800 dark:text-gray-200">Ergoline Affinity 500 Twin Power</h4>
-                                <div class="space-y-1.5">
-                                    <div class="price-row"><span>12 Minuten</span><span class="price-tag">→ 13,00 €</span></div>
-                                    <div class="price-row"><span>18 Minuten</span><span class="price-tag">→ 15,50 €</span></div>
-                                    <div class="price-row"><span>24 Minuten</span><span class="price-tag">→ 17,00 €</span></div>
-                                    <div class="price-row"><span>30 Minuten</span><span class="price-tag">→ 18,00 €</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sparangebote -->
-                    <div class="space-y-5 pt-6 border-t-2 border-dashed border-gray-200 dark:border-orange-500/20">
-                        <h3 class="text-center text-lg font-serif font-black border-b-2 pb-2 mx-4 drop-shadow-sm text-gray-800 border-orange-100 dark:text-gray-200 dark:border-orange-500/30">
-                            Unsere Sparangebote
-                        </h3>
-                        
-                        <!-- 10er Karte -->
-                        <div class="border p-5 rounded-2xl shadow-md relative overflow-hidden group hover:shadow-lg transition-all bg-gradient-to-r from-yellow-50 via-orange-50 to-red-50 border-orange-200 dark:bg-gray-800 dark:bg-none dark:border-orange-500/50 dark:shadow-[0_0_30px_rgba(249,115,22,0.4)]">
-                            <div class="absolute -right-6 top-4 bg-red-600 text-white text-[10px] font-extrabold px-10 py-1 rotate-45 shadow-md z-10">TIPP</div>
-                            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white/40 dark:bg-orange-500/10"></div>
-                            
-                            <div class="flex justify-between items-center mb-2 pr-6 relative z-0">
-                                <span class="font-extrabold text-lg text-gray-900 dark:text-white">10er Karte</span>
-                                <span class="text-2xl font-black drop-shadow-sm text-orange-600 dark:text-yellow-400 dark:drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]">35,- €</span>
-                            </div>
-                            <p class="text-xs leading-snug pr-2 font-medium relative z-0 text-gray-700 dark:text-gray-300">
-                                Bis zu 70 Min. sonnen. Auf allen Solarien nutzbar. <span class="font-bold text-green-500 dark:text-green-400">Wert bis zu 90€!</span>
-                            </p>
-                        </div>
-
-                        <!-- Flatrate / Club -->
-                        <div class="space-y-3">
-                            <h4 class="text-sm font-extrabold text-center mt-2 uppercase tracking-wide text-gray-500">Unsere Flatratecard</h4>
-                            
-                            <!-- Bronze -->
-                            <div class="p-4 rounded-2xl border shadow-sm flex justify-between items-center hover:shadow-md transition-shadow bg-white border-gray-100 dark:bg-gray-800/50 dark:border-gray-700">
-                                <div>
-                                    <div class="font-bold text-sm flex items-center text-gray-800 dark:text-gray-200"><span class="w-2 h-2 rounded-full bg-amber-700 mr-2 shadow-sm"></span>Bronze</div>
-                                    <div class="text-[10px] font-medium text-gray-500">Bis 18 Min. tägl. + Getränk</div>
-                                </div>
-                                <div class="font-bold text-base text-gray-900 dark:text-white">49,- €<span class="text-[10px] font-normal text-gray-500">/mtl</span></div>
-                            </div>
-
-                            <!-- Silber -->
-                            <div class="p-4 rounded-2xl border shadow-sm flex justify-between items-center hover:shadow-md transition-shadow bg-white border-gray-100 dark:bg-gray-800/50 dark:border-gray-700">
-                                <div>
-                                    <div class="font-bold text-sm flex items-center text-gray-800 dark:text-gray-200"><span class="w-2 h-2 rounded-full bg-gray-400 mr-2 shadow-sm"></span>Silber</div>
-                                    <div class="text-[10px] font-medium text-gray-500">Bis 24 Min. + Kosmetik + Getränk</div>
-                                </div>
-                                <div class="font-bold text-base text-gray-900 dark:text-white">59,- €<span class="text-[10px] font-normal text-gray-500">/mtl</span></div>
-                            </div>
-
-                            <!-- Gold -->
-                            <div class="p-4 rounded-2xl border shadow-md flex justify-between items-center transform hover:scale-[1.02] transition-transform bg-gradient-to-r from-amber-50 to-yellow-100 border-yellow-300 dark:bg-gray-800 dark:bg-none dark:border-yellow-500/50 dark:shadow-[0_0_20px_rgba(250,204,21,0.3)]">
-                                <div>
-                                    <div class="font-extrabold text-sm flex items-center text-gray-900 dark:text-yellow-400"><span class="w-2 h-2 rounded-full mr-2 shadow-sm bg-yellow-500 dark:bg-yellow-400 dark:shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>Gold</div>
-                                    <div class="text-[10px] font-medium text-gray-600 dark:text-gray-400">Bis 30 Min. + Kosmetik + Getränk</div>
-                                </div>
-                                <div class="font-black text-base drop-shadow-sm text-orange-600 dark:text-yellow-400">69,- €<span class="text-[10px] font-normal text-gray-500">/mtl</span></div>
-                            </div>
-                        </div>
-
-                        <!-- Monatskarte -->
-                        <div class="border p-4 rounded-2xl shadow-sm flex justify-between items-center hover:shadow-md transition-all bg-gray-50 border-gray-200 hover:bg-white dark:bg-gray-800/30 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                            <div>
-                                <span class="font-bold block text-sm text-gray-900 dark:text-white">Monatskarte</span>
-                                <span class="text-[10px] block font-medium text-gray-500 dark:text-gray-400">Bis 30 Min. täglich. Ohne Vertrag.</span>
-                            </div>
-                            <span class="text-xl font-black text-gray-800 dark:text-gray-200">89,- €</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5. Shop Karte -->
-            <div class="card-base">
-                <div class="text-center mb-8 relative">
-                    <div class="flex items-center justify-center gap-2 mb-1">
-                        <i data-lucide="shopping-bag" class="w-6 h-6 text-orange-500 drop-shadow-sm dark:text-pink-400 dark:drop-shadow-[0_0_10px_rgba(236,72,153,1)]"></i>
-                        <h2 class="text-2xl font-black tracking-tight drop-shadow-sm text-gray-800 dark:text-white dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">Shop & Service</h2>
-                    </div>
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Mehr als nur Sonne</p>
-                    <div class="w-16 h-1 mx-auto mt-3 rounded-full bg-gradient-to-r from-orange-300 to-red-400 opacity-60 dark:from-orange-500 dark:to-red-500 dark:shadow-[0_0_15px_rgba(249,115,22,1)] dark:opacity-100"></div>
-                </div>
-
-                <div class="space-y-6">
-                    <!-- Fashion Store -->
-                    <div class="p-6 rounded-2xl border text-center relative overflow-hidden group shadow-lg bg-gradient-to-br from-pink-50 via-white to-purple-50 border-pink-200 shadow-pink-500/10 dark:bg-gray-900 dark:bg-none dark:border-pink-500/30 dark:shadow-[0_0_30px_rgba(236,72,153,0.4)]">
-                        
-                        <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-20 group-hover:scale-125 transition-transform duration-700 blur-2xl bg-pink-200 dark:bg-pink-600"></div>
-                        
-                        <div class="inline-block p-4 rounded-full shadow-lg mb-4 transform group-hover:rotate-12 transition-transform bg-white shadow-pink-100 dark:bg-gray-800 dark:shadow-[0_0_20px_rgba(236,72,153,0.5)]">
-                            <i data-lucide="shopping-bag" class="w-7 h-7 drop-shadow-sm text-pink-500 dark:text-pink-400 dark:drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]"></i>
-                        </div>
-                        <h3 class="text-xl font-serif font-black mb-2 drop-shadow-sm text-gray-800 dark:text-white">Sarah's Fashion Store</h3>
-                        <p class="text-xs mb-6 leading-relaxed font-medium text-gray-600 dark:text-gray-300">
-                            Beauty, Mode und Accessoires. Stöbere durch unseren Online-Shop oder probiere es direkt im Studio an. Jetzt auch mit <strong class="text-pink-500">Avon</strong> Produkten!
-                        </p>
-                        <button class="text-xs font-bold py-3 px-8 rounded-full shadow-xl transform active:scale-95 transition-all hover:shadow-2xl hover:-translate-y-1 bg-gray-900 text-white shadow-gray-900/30 hover:bg-black dark:bg-pink-600 dark:text-white dark:shadow-[0_0_20px_rgba(236,72,153,0.6)] dark:hover:bg-pink-500">
-                            Zum Online Shop
-                        </button>
-                    </div>
-
-                    <!-- Paketdienste -->
-                    <div class="p-5 rounded-2xl border shadow-md bg-white border-gray-100 dark:bg-gray-800/40 dark:border-gray-700">
-                        <div class="flex items-center justify-center mb-5 text-gray-800 dark:text-white">
-                            <i data-lucide="package" class="mr-2 w-5 h-5 text-blue-500 drop-shadow-sm"></i>
-                            <h3 class="font-bold text-sm">Paketdienste</h3>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 gap-3">
-                            <div class="service-badge group">
-                                <span class="text-[10px] font-extrabold px-3 py-1.5 rounded-lg shadow-sm bg-[#FFB500] text-black min-w-[60px] text-center">UPS</span>
-                                <span class="text-xs font-bold text-gray-700 dark:text-white">UPS Access Point</span>
-                                <span class="text-[9px] font-medium text-gray-400">Versand & Abholung</span>
-                            </div>
-                            <div class="service-badge group">
-                                <span class="text-[10px] font-extrabold px-3 py-1.5 rounded-lg shadow-sm bg-[#DC0032] text-white min-w-[60px] text-center">DPD</span>
-                                <span class="text-xs font-bold text-gray-700 dark:text-white">DPD Pickup</span>
-                                <span class="text-[9px] font-medium text-gray-400">Versand & Abholung</span>
-                            </div>
-                            <div class="service-badge group">
-                                <span class="text-[10px] font-extrabold px-3 py-1.5 rounded-lg shadow-sm bg-[#002678] text-[#FDB913] min-w-[60px] text-center">GLS</span>
-                                <span class="text-xs font-bold text-gray-700 dark:text-white">GLS PaketShop</span>
-                                <span class="text-[9px] font-medium text-gray-400">Versand & Abholung</span>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-5 pt-4 border-t text-center border-gray-100 dark:border-gray-700">
-                            <p class="text-[10px] font-medium inline-block px-3 py-1 rounded-full bg-gray-50 text-gray-400 dark:bg-gray-700 dark:text-gray-300">
-                                Bitte Ausweis zur Abholung mitbringen.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 6. Anfahrt Karte -->
-            <div class="card-base">
-                <div class="text-center mb-8 relative">
-                    <div class="flex items-center justify-center gap-2 mb-1">
-                        <i data-lucide="map-pin" class="w-6 h-6 text-orange-500 drop-shadow-sm dark:text-red-400 dark:drop-shadow-[0_0_10px_rgba(248,113,113,1)]"></i>
-                        <h2 class="text-2xl font-black tracking-tight drop-shadow-sm text-gray-800 dark:text-white dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">Anfahrt</h2>
-                    </div>
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">So findest du zu uns</p>
-                    <div class="w-16 h-1 mx-auto mt-3 rounded-full bg-gradient-to-r from-orange-300 to-red-400 opacity-60 dark:from-orange-500 dark:to-red-500 dark:shadow-[0_0_15px_rgba(249,115,22,1)] dark:opacity-100"></div>
-                </div>
-
-                <div class="space-y-6">
-                    <div class="w-full h-48 rounded-3xl overflow-hidden relative border group cursor-pointer shadow-lg bg-gray-100 border-gray-300 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] dark:bg-gray-800 dark:border-red-500/20 dark:shadow-[0_0_30px_rgba(248,113,113,0.3)]" onclick="window.open('https://maps.google.com', '_blank')">
-                         <div class="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_center,_#9ca3af_1.5px,_transparent_1.5px)] bg-[length:20px_20px]"></div>
-                         <div class="absolute inset-0 flex items-center justify-center">
-                              <div class="relative">
-                                 <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-3 blur-md rounded-full group-hover:w-10 group-hover:blur-sm transition-all duration-300 bg-black/20 dark:bg-red-500/50"></span>
-                                 <i data-lucide="map-pin" class="w-14 h-14 relative z-10 transition-transform duration-300 group-hover:-translate-y-3 text-red-500 fill-red-100 drop-shadow-xl dark:fill-transparent dark:drop-shadow-[0_0_20px_rgba(248,113,113,0.8)]"></i>
-                              </div>
-                         </div>
-                         <div class="absolute bottom-4 left-4 right-4 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border text-xs flex justify-between items-center bg-white/95 border-white/60 text-gray-700 dark:bg-gray-900/90 dark:border-gray-600 dark:text-gray-300 dark:shadow-black/50">
-                             <span><span class="font-bold text-gray-900 dark:text-white">Musterstraße 12</span>, 12345 Musterstadt</span>
-                             <i data-lucide="navigation" class="w-3.5 h-3.5 text-blue-500"></i>
-                         </div>
-                    </div>
-             
-                    <div class="text-center">
-                      <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-bold py-3.5 px-10 rounded-full shadow-xl transform active:scale-95 hover:scale-105 transition-all hover:shadow-2xl bg-gradient-to-r from-gray-800 to-black text-white shadow-gray-900/40 dark:from-red-600 dark:to-orange-600 dark:shadow-[0_0_25px_rgba(220,38,38,0.6)]">
-                        <i data-lucide="navigation" class="w-4.5 h-4.5 animate-pulse"></i>
-                        Route starten
-                      </a>
-                      <p class="text-[10px] mt-4 font-medium drop-shadow-sm text-white/50 dark:text-gray-400">
-                        Kostenlose Parkplätze direkt vor dem Studio verfügbar.
-                      </p>
-                    </div>
-                 </div>
-            </div>
-
-            <!-- Footer Links -->
-            <div class="flex justify-center gap-8 py-6">
-                <a href="#" class="transition-all transform hover:scale-110 hover:-translate-y-1 duration-300 text-white/80 hover:text-white drop-shadow-lg dark:text-pink-400 dark:hover:text-pink-300 dark:drop-shadow-[0_0_15px_rgba(236,72,153,0.8)]">
-                    <i data-lucide="instagram" width="28" height="28"></i>
-                </a>
-                <a href="#" class="transition-all transform hover:scale-110 hover:-translate-y-1 duration-300 text-white/80 hover:text-white drop-shadow-lg dark:text-blue-400 dark:hover:text-blue-300 dark:drop-shadow-[0_0_15px_rgba(96,165,250,0.8)]">
-                    <i data-lucide="facebook" width="28" height="28"></i>
-                </a>
-                <a href="#" class="transition-all transform hover:scale-110 hover:-translate-y-1 duration-300 text-white/80 hover:text-yellow-300 drop-shadow-lg dark:text-yellow-400 dark:hover:text-yellow-300 dark:drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]">
-                    <i data-lucide="star" width="28" height="28"></i>
-                </a>
-            </div>
-            
-            <p class="text-center text-xs pb-8 font-medium drop-shadow-md text-white/50 dark:text-gray-400">
-                © <script>document.write(new Date().getFullYear())</script> African Sun. Alle Rechte vorbehalten.
-            </p>
-
-        </div>
+  <!-- ============================ HERO ============================ -->
+  <section class="tile hero">
+    <div class="hero__media" style="background-image:url('https://images.pexels.com/photos/36829402/pexels-photo-36829402/free-photo-of-juicy-beef-shawarma-rotating-on-vertical-spit.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <span class="status"><span class="dot"></span><span class="status-text">Geöffnet</span></span>
+      <div class="hero__head">
+        <span class="pill">Ocakbaşı · Wiesbaden</span>
+        <h1 class="hero__name">Diyarbakır Ocakbaşı</h1>
+        <p class="hero__spec">Mangal · Kebap · Şiş · Lahmacun</p>
+        <p class="hero__sub">Authentisch vom Holzkohle-Ocakbaşı.</p>
+      </div>
     </div>
+    <div class="hero__chips">
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></svg> 100 % Halal</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 3-1 4 0 7m4-4c1 2-1 3 0 5"/><path d="M5 13a7 7 0 0 0 14 0c0-2-1-3-2-4 0 2-2 2-2 0 0-3-3-4-3-6-2 2-4 4-4 7-1 0-2-1-2-2-1 1-1 3-1 5Z"/></svg> Holzkohle-Grill</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Täglich frisch</span>
+    </div>
+  </section>
 
-    <!-- Wiederkehrende Klassen für sauberen Code -->
-    <style type="text/tailwindcss">
-        .card-base {
-            @apply rounded-3xl overflow-hidden p-6 relative z-10 transition-all duration-500;
-            @apply bg-white/95 backdrop-blur-xl border border-white/40 text-gray-900 shadow-[0_20px_40px_-5px_rgba(0,0,0,0.4)];
-            /* Dark Mode Overrides */
-            @apply dark:bg-gray-900/80 dark:backdrop-blur-md dark:border dark:border-orange-500/40 dark:text-white dark:shadow-[0_0_50px_rgba(249,115,22,0.5)] dark:hover:shadow-[0_0_60px_rgba(249,115,22,0.7)];
-        }
-        
-        .cabin-item {
-            @apply p-4 rounded-2xl border flex items-center justify-between hover:shadow-lg transition-all duration-300 cursor-default;
-            @apply bg-white border-gray-100 hover:border-orange-300;
-            @apply dark:bg-gray-800/40 dark:border-gray-700 dark:hover:border-orange-500/80 dark:hover:shadow-[0_0_25px_rgba(249,115,22,0.5)];
-        }
+  <!-- ======================= 3 INFO-KACHELN ======================= -->
+  <div class="info-grid stagger">
+    <div class="tile info">
+      <svg class="top-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span class="label">Standort</span><span class="val">65183 Wiesbaden</span>
+    </div>
+    <div class="tile info">
+      <svg class="top-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span class="label">Öffnungszeiten</span><span class="val">Tgl. 11 – 24 Uhr</span>
+    </div>
+    <div class="tile info">
+      <svg class="top-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 17V8h3a2.5 2.5 0 0 1 0 5H9"/></svg>
+      <span class="label">Parken</span><span class="val">Parkhaus i. d. Nähe</span>
+    </div>
+  </div>
 
-        .price-block {
-            @apply p-4 rounded-2xl border shadow-[inset_0_1px_3px_rgba(0,0,0,0.02)];
-            @apply bg-gray-50 border-gray-100;
-            @apply dark:bg-gray-800/30 dark:border-gray-700;
-        }
+  <!-- ============================ CTAs ============================ -->
+  <div class="cta-row reveal reveal--up">
+    <a class="btn btn-primary" href="tel:+4961156598008">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
+      Jetzt anrufen
+    </a>
+    <a class="btn btn-ghost" href="#karte">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4zM4 11h16M4 16h10"/></svg>
+      Zur Speisekarte
+    </a>
+  </div>
 
-        .price-row {
-            @apply flex justify-between items-center text-xs border-b pb-1.5 last:border-0 last:pb-0;
-            @apply border-gray-200 dark:border-gray-700;
-        }
+  <!-- ========================== LAUFBAND ========================== -->
+  <div class="marquee reveal reveal--scale" aria-hidden="true">
+    <div class="marquee__track">
+      <span>Vom Holzkohle-Ocakbaşı</span><span>Adana · Urfa · Kuzu Şiş</span><span>Hausgemachte Saucen</span><span>100 % Halal</span><span>Täglich frisch</span><span>Lahmacun &amp; Pide</span>
+    </div>
+  </div>
 
-        .price-row span:first-child {
-            @apply font-medium text-gray-600 dark:text-gray-400;
-        }
+  <!-- =========================== TRUST =========================== -->
+  <section class="tile trust stagger">
+    <div class="trust-cell"><span class="num" data-count="100" data-suffix=" %">0 %</span><span class="text">Halal</span></div>
+    <div class="trust-cell"><span class="num" data-count="100" data-suffix=" %">0 %</span><span class="text">Zufriedenheit</span></div>
+    <div class="trust-cell"><span class="big">Premium</span><span class="text">Fleisch</span></div>
+    <div class="trust-cell"><span class="big">Täglich</span><span class="text">Frisch</span></div>
+  </section>
 
-        .price-tag {
-            @apply font-bold px-2 py-0.5 rounded shadow-sm border;
-            @apply bg-white text-gray-900 border-gray-100;
-            @apply dark:bg-gray-700 dark:text-yellow-400 dark:border-gray-600 dark:shadow-[0_0_8px_rgba(250,204,21,0.2)];
-        }
+  <!-- ========================= SPEISEKARTE ========================= -->
+  <div class="head reveal reveal--up" id="karte"><span class="eyebrow">Authentisches Ocakbaşı</span></div>
 
-        .service-badge {
-            @apply flex items-center justify-between p-2.5 px-3 rounded-xl border shadow-sm hover:shadow-md transition-shadow;
-            @apply bg-white border-gray-100;
-            @apply dark:bg-gray-700/50 dark:border-gray-600;
-        }
-    </style>
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Suppen · Çorba</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Linsensuppe</span><span class="m-note">6 🍃</span><span class="m-leader"></span><span class="m-price">7,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Tagessuppe</span><span class="m-note">6</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+    </div>
+  </section>
 
-    <script>
-        // Icons Initialisieren
-        lucide.createIcons();
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Vorspeisen · Meze</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Haydari</span><span class="m-note">1 4 6 8 🍃</span><span class="m-leader"></span><span class="m-price">8,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Yoğurtlu Patlıcan Ezme</span><span class="m-note">1 4 6 8 🍃</span><span class="m-leader"></span><span class="m-price">8,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Acılı Ezme</span><span class="m-note">1 6 8 🌶️ 🍃</span><span class="m-leader"></span><span class="m-price">8,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Karışık Meze</span><span class="m-note">1 4 6 8</span><span class="m-leader"></span><span class="m-price">9,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Çiğ Köfte</span><span class="m-note">1 4 6 8 🍃</span><span class="m-leader"></span><span class="m-price">10,00 €</span></div></div>
+    </div>
+  </section>
 
-        // Dark Mode Logic
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-    </script>
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Salate · Salata</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Vegetarischer Dürüm</span><span class="m-note">2 3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">6,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Beilagen Salat</span><span class="m-note">1 6 8 🍃</span><span class="m-leader"></span><span class="m-price">5,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Gemischter Salat</span><span class="m-note">1 6 8</span><span class="m-leader"></span><span class="m-price">7,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Bauernsalat</span><span class="m-note">1 6 8 🍃</span><span class="m-leader"></span><span class="m-price">8,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Dönersalat</span><span class="m-note">1 6 8</span><span class="m-leader"></span><span class="m-price">10,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Thunfischsalat</span><span class="m-note">1 6 8</span><span class="m-leader"></span><span class="m-price">10,00 €</span></div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Vom Holzkohlegrill</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+      <p class="kicker">Inkl. Beilagen Salat, Brot und wahlweise Bulgur, Pommes oder Reis</p>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Adana Kebab</span><span class="m-note">1 8 🌶️</span><span class="m-leader"></span><span class="m-price">14,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Urfa Kebab</span><span class="m-note">1 8</span><span class="m-leader"></span><span class="m-price">14,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Tavuk Şiş</span><span class="m-note">1 8</span><span class="m-leader"></span><span class="m-price">14,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Tavuk Kanat</span><span class="m-note">1 8</span><span class="m-leader"></span><span class="m-price">14,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Adana mit Joghurtsoße</span><span class="m-note">1 2 4 6 8 🌶️</span><span class="m-leader"></span><span class="m-price">15,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Kuzu Şiş</span><span class="m-note">1 8</span><span class="m-leader"></span><span class="m-price">20,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Beyti Kebab</span><span class="m-note">1 2 4 6 8</span><span class="m-leader"></span><span class="m-price">17,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner Beyti Kebab</span><span class="m-note">1 2 4 8</span><span class="m-leader"></span><span class="m-price">15,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Ali Nazik</span><span class="m-note">1 2 4 6 8</span><span class="m-leader"></span><span class="m-price">18,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Kuzu Pirzola</span><span class="m-note">1 8</span><span class="m-leader"></span><span class="m-price">21,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Karışık Izgara</span><span class="m-note">1 8</span><span class="m-leader"></span><span class="m-price">1P 20,00 €  ·  2P 38,50 €</span></div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Aus dem Holzofen · Pizza</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+      <p class="kicker">ca. 30 cm · Grundbelag: Tomatensoße &amp; Käse</p>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Margherita</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">7,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Putensalami</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Pepperoniwurst</span><span class="m-note">3 6 8 🌶️</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Putenschinken</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Champignons</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Vegetarisch</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Hawaii</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Mafia</span><span class="m-note">3 6 8 🌶️</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Calzone</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Thunfisch</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Sucuk m. Champignons</span><span class="m-note">3 6 8 🌶️</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Mozzarella</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Diyarbakır</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Gorgonzola</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">4 Käse</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Wiesbaden</span><span class="m-note">3 6 8 🌶️</span><span class="m-leader"></span><span class="m-price">9,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Familien Pizza</span><span class="m-note">50×50 cm, 3 6 8</span><span class="m-leader"></span><span class="m-price">25,00 €</span></div></div>
+      <div class="m-desc">Extras: Fleischbelag +1,00 € · Gemüse oder Käse +1,00 €</div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Döner Kebab &amp; Box</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Kinder-mini Döner</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">6,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner Kebab</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">7,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner m. Extra Fleisch</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">8,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner Teller</span><span class="m-note">2 6 8</span><span class="m-leader"></span><span class="m-price">13,00 €</span></div><div class="m-desc">Bulgur / Pommes / Reis</div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">İskender Kebab</span><span class="m-note">1 2 4 6 8</span><span class="m-leader"></span><span class="m-price">15,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner Box</span><span class="m-note">2 6 8</span><span class="m-leader"></span><span class="m-price">7,00 €</span></div><div class="m-desc">Bulgur / Pommes / Reis / Salat</div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Dürüm &amp; Lahmacun</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner Dürüm</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">7,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Adana Dürüm</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Tavuk Şiş Dürüm</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Kuzu Şiş Dürüm</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">11,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Lahmacun</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">6,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner Lahmacun</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">8,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Diyarbakır Lahmacun Teller</span><span class="m-note">2 3 6 8</span><span class="m-leader"></span><span class="m-price">11,00 €</span></div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Pide</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Pide (Käse / Weichkäse)</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">10,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Ispanaklı</span><span class="m-note">3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">11,00 €</span></div><div class="m-desc">Spinat / Käse</div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Kıymalı</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">11,00 €</span></div><div class="m-desc">Lammhack / Käse</div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Sucuk</span><span class="m-note">3 6 8 🌶️</span><span class="m-leader"></span><span class="m-price">11,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Döner Pide</span><span class="m-note">3 6 8</span><span class="m-leader"></span><span class="m-price">11,00 €</span></div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Vegetarisches &amp; Beilagen</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Vegetarisches Sandwich</span><span class="m-note">2 3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">6,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Çiğ Köfte Dürüm</span><span class="m-note">2 3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">6,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Falafel Sandwich</span><span class="m-note">2 3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">6,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Falafel Teller</span><span class="m-note">2 3 6 8 🍃</span><span class="m-leader"></span><span class="m-price">10,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Beilagen</span><span class="m-note">ab 5,00 €</span><span class="m-leader"></span><span class="m-price">🍃</span></div><div class="m-desc">Bulgur / Pommes / Reis</div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Desserts · Tatlılar</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Baklava</span><span class="m-note">🍃</span><span class="m-leader"></span><span class="m-price">5,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Katmer</span><span class="m-note">🍃</span><span class="m-leader"></span><span class="m-price">7,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Milchreis</span><span class="m-note">🍃</span><span class="m-leader"></span><span class="m-price">3,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Künefe</span><span class="m-note">🍃</span><span class="m-leader"></span><span class="m-price">7,50 €</span></div><div class="m-desc">(+Eis 1,00 €)</div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Layali Lubnan</span><span class="m-note">🍃</span><span class="m-leader"></span><span class="m-price">3,50 €</span></div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Getränke · İçecekler</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-item"><div class="m-row"><span class="m-name">Tee</span><span class="m-leader"></span><span class="m-price">2,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Kaffee</span><span class="m-leader"></span><span class="m-price">2,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Espresso</span><span class="m-leader"></span><span class="m-price">2,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Cappuccino</span><span class="m-leader"></span><span class="m-price">3,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Cola / Cola Zero / Fanta / Sprite / Spezzi</span><span class="m-note">0,33 L / 1 L</span><span class="m-leader"></span><span class="m-price">2,50 € / 3,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Pfirsich Eistee</span><span class="m-leader"></span><span class="m-price">2,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Multivitaminsaft</span><span class="m-leader"></span><span class="m-price">2,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Durstlöscher</span><span class="m-note">0,5 L</span><span class="m-leader"></span><span class="m-price">2,00 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Uludag</span><span class="m-leader"></span><span class="m-price">2,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Wasser</span><span class="m-note">0,5 L</span><span class="m-leader"></span><span class="m-price">1,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Apfelsaftschorle</span><span class="m-leader"></span><span class="m-price">2,50 €</span></div></div>
+      <div class="m-item"><div class="m-row"><span class="m-name">Ayran</span><span class="m-leader"></span><span class="m-price">1,50 €</span></div></div>
+    </div>
+  </section>
+
+  <section class="tile cat reveal reveal--up">
+    <div class="cat-head">
+      <h2>Legende · Symbole &amp; Zusatzstoffe</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="m-list">
+      <div class="m-desc" style="margin-top:0;"><strong>Symbole auf der Speisekarte:</strong><br/>🍃 Vegetarisch · 🌶️ Pikant / Scharf · ☪ Halal zertifiziert<br/><br/><strong>Zusatzstoffe (1–12):</strong><br/>1. Konservierungsstoffe (E200–203: Sorbinsäure, PHB)<br/>2. Antioxidationsmittel (E310–312: Gallate, BHT)<br/>3. Farbstoffe (E101, 102: Lactoflavin, Tartrazin)<br/>4. Emulgatoren (E322, 471: Lecithin, Diglyceride)<br/>5. Geliermittel (E440: Pectine)<br/>6. Verdickungsmittel (E407, 410: Carragen, JBK)<br/>7. Stabilisatoren (Phosphate)<br/>8. Geschmacksverstärker (E620–625: Natriumglutamat)<br/>9. Süßungsmittel (E420, 951: Sorbit, Aspartam)<br/>10. Sonstiges – Koffeinhaltig (Kaffee, Cola)<br/>11. Allergene – Gluten, Eier, Nüsse<br/>12. Allergene – Fisch, Krustentiere</div>
+    </div>
+  </section>
+
+  <!-- =========================== CTA =========================== -->
+  <div class="cta-row reveal reveal--up">
+    <a class="btn btn-primary" href="tel:+4961156598008">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
+      Jetzt bestellen
+    </a>
+  </div>
+
+  <!-- ========================== GALERIE ========================== -->
+  <div class="head reveal reveal--up"><span class="eyebrow">Einblicke</span></div>
+  <section class="tile gallery reveal reveal--up">
+    <div class="cat-head">
+      <h2>Galerie</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="grid stagger">
+      <div class="gtile"><img src="assets_diyarbakir/mercimek.jpg" alt="Linsensuppe" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/baklava.jpg" alt="Baklava" loading="lazy"></div>
+      <div class="gtile wide"><img src="assets_diyarbakir/diya.jpg" alt="Diyarbakır Ocakbaşı" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/pizza.jpg" alt="Pizza" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/dönerteller.jpg" alt="Dönerteller" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/grilltteller.jpg" alt="Grillteller" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/fleisch.jpg" alt="Fleischgerichte" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/lamm.jpg" alt="Lammgerichte" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/kahve.jpg" alt="Kaffee & Getränke" loading="lazy"></div>
+      <div class="gtile"><img src="assets_diyarbakir/gerichte.jpg" alt="Verschiedene Gerichte" loading="lazy"></div>
+    </div>
+  </section>
+
+  <!-- ========================== ANFAHRT ========================== -->
+  <div class="head reveal reveal--up"><span class="eyebrow">So findest du uns</span></div>
+  <section class="tile anfahrt reveal reveal--up">
+    <div class="cat-head">
+      <h2>Anfahrt</h2>
+      <svg class="flourish" viewBox="0 0 220 18" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><line x1="6" y1="9" x2="84" y2="9"/><line x1="136" y1="9" x2="214" y2="9"/><path d="M84 9q9 0 12-5 M84 9q9 0 12 5"/><path d="M136 9q-9 0 -12-5 M136 9q-9 0 -12 5"/><circle cx="98" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="122" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M110 2.5l6 6.5-6 6.5-6-6.5z" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="contact">
+      <div class="line"><span class="label">Adresse</span><span class="v">Bleichstraße 33, 65183 Wiesbaden</span></div>
+      <div class="line"><span class="label">Telefon</span><span class="v">0611 – 5659 8008</span></div>
+      <div class="cta-row">
+        <a class="btn btn-primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Bleichstra%C3%9Fe+33+65183+Wiesbaden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Route öffnen
+        </a>
+        <a class="btn btn-ghost" href="tel:+4961156598008">Anrufen &amp; vorbestellen</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">© <span class="year"></span> Diyarbakır Ocakbaşı · Wiesbaden &nbsp;·&nbsp; <a href="#top">nach oben ↑</a></footer>
+</main>
+
+<!-- Sticky Halal-Siegel unten links -->
+<a class="halal-badge" href="#" aria-label="100 % Halal zertifiziert" title="100 % Halal">
+  <img src="icon_halal_webp.webp" alt="100 % Halal" />
+</a>
+
+<script>
+(function(){
+  const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.year').forEach(e => e.textContent = new Date().getFullYear());
+
+  function revealNow(){ document.body.classList.add('ready'); }
+  window.addEventListener('load', revealNow);
+  document.addEventListener('DOMContentLoaded', () => setTimeout(revealNow, 300));
+
+  /* Live „Geöffnet / Geschlossen" */
+  (function(){
+    const st = document.querySelector('.status');
+    if (!st) return;
+    const o = +document.body.dataset.open, c = +document.body.dataset.close;
+    const h = new Date().getHours();
+    const open = (c > o) ? (h >= o && h < c) : (h >= o || h < c);
+    st.classList.add(open ? 'open' : 'closed');
+    const tx = st.querySelector('.status-text');
+    if (tx) tx.textContent = open ? 'Geöffnet' : 'Geschlossen';
+  })();
+
+  /* Laufband scroll-gesteuert */
+  (function(){
+    const t = document.querySelector('.marquee__track');
+    if (!t || REDUCE) return;
+    t.innerHTML += t.innerHTML;
+    let half = t.scrollWidth / 2, ticking = false;
+    function render(){
+      const y = window.pageYOffset || document.documentElement.scrollTop;
+      let x = -((y * 0.5) % half);
+      if (x > 0) x -= half;
+      t.style.transform = 'translate3d(' + x + 'px,0,0)';
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => { if (!ticking){ ticking = true; requestAnimationFrame(render); } }, { passive:true });
+    window.addEventListener('resize', () => { half = t.scrollWidth / 2; render(); });
+    render();
+  })();
+
+  /* Zähl-Animation */
+  function countUp(el){
+    const target = parseInt(el.dataset.count, 10) || 0;
+    const suffix = el.dataset.suffix || '';
+    if (REDUCE){ el.textContent = target + suffix; return; }
+    const dur = 1400, start = performance.now();
+    (function step(now){
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  /* Scroll-Einflug + Zähler */
+  (function(){
+    const reveals = document.querySelectorAll('.reveal, .stagger');
+    const nums = document.querySelectorAll('.num[data-count]');
+    if (REDUCE || !('IntersectionObserver' in window)){
+      reveals.forEach(e => e.classList.add('in'));
+      nums.forEach(countUp);
+      return;
+    }
+    const io = new IntersectionObserver((ents, ob) => {
+      ents.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); ob.unobserve(e.target); } });
+    }, { threshold:.14, rootMargin:'0px 0px -8% 0px' });
+    reveals.forEach(e => io.observe(e));
+    const io2 = new IntersectionObserver((ents, ob) => {
+      ents.forEach(e => { if (e.isIntersecting){ countUp(e.target); ob.unobserve(e.target); } });
+    }, { threshold:.6 });
+    nums.forEach(n => io2.observe(n));
+  })();
+})();
+</script>
 </body>
 </html>
